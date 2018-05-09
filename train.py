@@ -33,9 +33,8 @@ class FireDetect:
 
 
     # Initialize Model
-
     def image_initial(self, image):
-        imageX = tf.reshape(image, [-1, imageDims[0], imageDims[1], channelDims])
+        imageX = tf.reshape(image, [-1, imageDims[0], imageDims[1], inChnlDims])
         return imageX
 
     def weight_initial(self, shape=initWtShp):
@@ -50,7 +49,6 @@ class FireDetect:
 
     
     ## CNN Model
-
     def conv2d(self, inputX, weight, strides=convStrd):
         return tf.nn.conv2d(inputX, weight, strides=strides, padding='SAME')
 
@@ -61,7 +59,6 @@ class FireDetect:
 
 
     ## Process Model
-
     def verify_dimension(self):
         # Left blank now.
         # For verify dimension of image after pooling is still capable of processing another conv.
