@@ -39,6 +39,12 @@
 ### 然后初始化weight和bias
 
 
+### CNN_recursion 递归计算CNN，如果次数到0，返回pool值和pool的厚度
 
+### fully_connected 全连接层，因为一般只有2层，就没有写循环，中间调用了dropout
+
+### Dropout: Tensorflow的方法，避免过拟合
+
+### 要测试整个class 调用 test_class，要测试recursion部分，调用 test_recursion
 
 
