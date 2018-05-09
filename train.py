@@ -35,7 +35,7 @@ class FireDetect:
     # Initialize Model
 
     def image_initial(self, image):
-        imageX = tf.reshape(image, [-1, imageDims[0], imageDims[1], channelDims])
+        imageX = tf.reshape(image, [-1, imageDims[0], imageDims[1], inChnlDims])
         return imageX
 
     def weight_initial(self, shape=initWtShp):
