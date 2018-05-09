@@ -110,7 +110,7 @@ class FireDetect:
         return tf.nn.dropout(xTemp, keep_prob)
 
 
-    """
+
     # For test of whole class
     def test_class(self):
         imageX = self.image_initial(inImage)
@@ -123,6 +123,8 @@ class FireDetect:
     def test_recursion(self):
         imageX = self.image_initial(inImage)
         self.CNN_retursion(2, imageX, initWtShp, initBsShp, outChnlDims)
-    """
 
 
+
+temp = FireDetect()
+temp.test_class()
