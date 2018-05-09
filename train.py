@@ -3,14 +3,19 @@ import tensorflow as tf
 # Get image input first
 inImage = []
 
-
-imageDims = [50, 50]
-channelDims = 3
-initWtShp = [0, 0, channelDims, 0]  # Shape size: 1X4 Matrix: [patch size: 2x1, input channels, output channels].
-initBsShp = [initWtShp[-1]]  # Shape size = initWtShp output channels.
+# Begin
+inChnlDims = [3]  # Input channel dimension: Colored image, dimension = 3.
+outChnlDims = [32]  # Output channel dimension: Expected output dimension after first conv layer.
+imageDims = [50, 50]  # Image dimension: For later convert image to tensor.
+patchShp = [5, 5]  # Patch Shape: Shape of sliding window.
+initWtShp = patchShp+inChnlDims+outChnlDims  # Shape size: 1X4 Matrix: [patch size: 2x1, input channels, output channels].
+initBsShp = outChnlDims  # Shape size = initWtShp output channels.
 convStrd = [1, 1, 1, 1]  # CNN Stride: step length for sliding window in Conv layers.
 poolSz = [1, 2, 2, 1]  # Pooling Size. Default is 2x2: Each Pooling layer reduces 4 dimensions.
-poolStrd = [1, 2, 2, 1] # Pooling Stride: step length for sliding window in Pooling layers
+poolStrd = [1, 2, 2, 1]  # Pooling Stride: step length for sliding window in Pooling layers.
+inFulConnNum = 1024  # Input Fully Connected Number: Number of nerves in FIRST fully connected layer.
+outFulConnNum = 10  # Output Fully Connected Number: Number of nerves in SECOND fully connected layer.
+
 
 
 class FireDetect:
@@ -25,7 +30,6 @@ class FireDetect:
         except:
             print("Session Starting Fails")
             exit()
-
 
 
     # Initialize Model
@@ -44,8 +48,8 @@ class FireDetect:
         return tf.Variable(initial)
 
 
-
-    # CNN Model
+    
+    ## CNN Model
 
     def conv2d(self, inputX, weight, strides=convStrd):
         return tf.nn.conv2d(inputX, weight, strides=strides, padding='SAME')
@@ -54,24 +58,74 @@ class FireDetect:
         return tf.nn.max_pool(x, ksize=ksize, strides=strides, padding='SAME')
 
 
-    #Process Model
 
-    def CNN_train(self):
 
-        # Could update with loops
+    ## Process Model
 
-        W_conv1 = self.weight_initial()
-        b_conv1 = self.bias_variable()
+    def verify_dimension(self):
+        # Left blank now.
+        # For verify dimension of image after pooling is still capable of processing another conv.
+        return
+
+
+
+    def CNN_recursion(self, conv_times, xTemp, weightShp, biasShp, outDim):
+        if conv_times == 0:
+            return xTemp, outDim
+
+        weightConv = self.weight_initial(shape=weightShp)
+        biasConv = self.bias_initial(shape=biasShp)
+
+        conv = tf.nn.relu(self.conv2d(xTemp, weightConv) + biasConv)
+        pool = self.max_pool_2x2(conv)
+
+        weightShp = patchShp + [outDim] + [outDim*2]
+        biasShp = [outDim*2]
+        outDim = outDim*2
+
+        return self.CNN_recursion(conv_times-1, pool, weightShp, biasShp, outDim)
+
+
+
+    def fully_connected(self, xTemp, outDim):
+        flatSize = len(xTemp.reshape(-1)) * outDim
+
+        weightFulConn_1 = self.weight_initial([flatSize, inFulConnNum])
+        biasFulConn_1 = self.bias_initial([inFulConnNum])
+
+        poolFlat_1 = tf.reshape(xTemp, [-1, flatSize])
+        convFulConn_1 = tf.nn.relu(tf.matmul(poolFlat_1, weightFulConn_1) + biasFulConn_1)
+
+        convDrop = self.drop_out(convFulConn_1)
+
+        weightFulConn_2 = self.weight_initial([inFulConnNum, outFulConnNum])
+        biasFulConn_2 = self.bias_initial([outFulConnNum])
+
+        convFinal = tf.nn.softmax(tf.matmul(convDrop, weightFulConn_2) + biasFulConn_2)
+
+        return convFinal
+
+
+
+    # Avoid over-fitting
+    def drop_out(self, xTemp):
+        keep_prob = tf.placeholder(tf.float32)
+        return tf.nn.dropout(xTemp, keep_prob)
+
+
+    """
+    # For test of whole class
+    def test_class(self):
         imageX = self.image_initial(inImage)
-
-        h_conv1 = tf.nn.relu(self.conv2d(imageX, W_conv1) + b_conv1)
-        h_pool1 = self.max_pool_2x2(h_conv1)
-
-
+        xTmep, outDim = self.CNN_retursion(2, imageX, initWtShp, initBsShp, outChnlDims)
+        self.fully_connected(xTmep, outDim)
+        return
 
 
-        W_conv2 = weight_variable([5, 5, 32, 64])
-        b_conv2 = bias_variable([64])
+    # For test of recursion ONLY
+    def test_recursion(self):
+        imageX = self.image_initial(inImage)
+        self.CNN_retursion(2, imageX, initWtShp, initBsShp, outChnlDims)
+    """
 
-        h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
-        h_pool2 = max_pool_2x2(h_conv2)
+
