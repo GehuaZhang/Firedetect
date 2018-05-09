@@ -1,1 +1,1 @@
-# Firedetect
+# CNN for image recognition
