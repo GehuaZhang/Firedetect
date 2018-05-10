@@ -11,6 +11,8 @@ class ImageProcess(object):
         deImage = tf.image.decode_png(file, channels=3)
         # Convert int to float
         floatImage = tf.image.convert_image_dtype(image=deImage, dtype=tf.float32)
+
+
         self.imageTemp = sess_image.run(floatImage)
         print(self.imageTemp.shape)
 
