@@ -12,7 +12,6 @@ class ImageProcess(object):
         # Convert int to float
         floatImage = tf.image.convert_image_dtype(image=deImage, dtype=tf.float32)
 
-
         self.imageTemp = sess_image.run(floatImage)
         print(self.imageTemp.shape)
 
@@ -29,6 +28,7 @@ class ImageProcess(object):
         return
 
     def image_show(self):
+        plt.imshow()
         plt.show()
 
 
