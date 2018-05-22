@@ -25,7 +25,7 @@ def xml_process(directory='output.xml', objectType="fire", objectID = 1):
         return
 
     # For Existed Object, Do Following
-    # Looking for "ploygon"
+    # Looking for "polygon"
     list_polygon=objects.getElementsByTagName('polygon')
 
     dict_coord = {}
