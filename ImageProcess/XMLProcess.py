@@ -45,7 +45,6 @@ def xml_process(directory='output.xml', objectType="fire", objectID = 1):
                     temp_l = points.getElementsByTagName('l').item(0).firstChild.data
 
                     dict_coord[temp_id].append([temp_x, temp_y, temp_l])
-
     return dict_coord
 
 test = xml_process()
