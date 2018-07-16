@@ -4,6 +4,7 @@
 Created on 2018-07-13
 @author: Gehua Zhang
 """
+
 import os
 from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
@@ -12,7 +13,6 @@ import numpy as np
 
 # For image augmentation, parameters are randomly picked.
 def image_augmentation(train_path, test_path, size=(224,224)):
-
     # Using augmented pictures as rules specified
     augment_rule = image.ImageDataGenerator(featurewise_center=True, featurewise_std_normalization=True,
                                             rotation_range=20, width_shift_range=0.2, height_shift_range=0.2,

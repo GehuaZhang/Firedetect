@@ -8,7 +8,6 @@ Created on 2018-07-13
 # Ignore Hardware Acceleration Warning
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 from keras.applications.vgg16 import VGG16, decode_predictions
 from keras.preprocessing import image
 import numpy as np
