@@ -20,4 +20,4 @@ def pretrain_vgg16(train_data):
     for tain_img in train_data:
         features = model.predict(tain_img)
         #print(model.summary())
-        print(decode_predictions(features, top=3))
+        print(decode_predictions(features, top=10))
