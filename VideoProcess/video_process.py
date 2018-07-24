@@ -9,14 +9,14 @@ import cv2
 import os
 import shutil
 
-# Modify this path to the directory where you store your videos
+# Modify this path to the directory where you store videos
 v_directory_path = r'D:\AliothAtlas\Project\mivia_fire\mivia_fire'
 # Modify this path to the desired directory where you store images
 i_directory_path = r'D:\AliothAtlas\Project\mivia_fire\mivia_fire'
 # Allowed video format
 video_format = ['mp4','avi']
 # Time span to capture images, in seconds
-time_span = 1.2
+time_span = 1.5
 
 
 files = os.listdir(v_directory_path)
@@ -39,6 +39,10 @@ for video_path in files:
         while success:
             success, image = vidcap.read()
             frame_rate = round(time_span*vidcap.get(cv2.CAP_PROP_FPS),0)  # get frame rate
+            if frame_rate == 0:
+                print("Frame Increment Below Zero, Consider Using Larger Time Span")
+                break
+
             frame_id = vidcap.get(cv2.CAP_PROP_POS_FRAMES)  # get frame ID, index by numbers
 
             if frame_id%frame_rate == 0:
