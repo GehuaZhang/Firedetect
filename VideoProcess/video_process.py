@@ -23,12 +23,13 @@ files = os.listdir(v_directory_path)
 list_videos = []
 
 for video_path in files:
-    if video_path[-3:] in video_format and os.path.isdir(video_path) == False: #If this file is in video_format and is not a directory
+    if video_path[-3:] in video_format and os.path.isdir(video_path) == False: # If this file is in video_format and is not a directory
         i_directory_name = os.path.join(i_directory_path, (video_path[:-4]))
         v_directory_name = os.path.join(v_directory_path, video_path)
         print("Processing: "+str(video_path[:-4]))
 
-        shutil.rmtree(i_directory_name)  # delete existing directory
+        if os.path.exists(i_directory_name):
+            shutil.rmtree(i_directory_name)  # delete existing directory
         os.makedirs(i_directory_name)  # create directory
 
         vidcap = cv2.VideoCapture(v_directory_name)
