@@ -38,7 +38,7 @@ for video_path in files:
 
         while success:
             success, image = vidcap.read()
-            frame_rate = round(time_span*vidcap.get(cv2.CAP_PROP_FPS),0)  # get frame rate
+            frame_rate = round(time_span*vidcap.get(cv2.CAP_PROP_FPS), 0)  # get frame rate
             if frame_rate == 0:
                 print("Frame Increment Below Zero, Consider Using Larger Time Span")
                 break
