@@ -80,10 +80,9 @@ model.compile(optimizer=adam, loss=ssd_loss.compute_loss)
 
 
 
-#
-#
 
-img_path = r'D:\CodeProjects\AliothAtlas\FireDetect\DataSet\other\frame17.jpg'
+
+img_path = r'D:\CodeProjects\AliothAtlas\FireDetect\DataSet\other\road.jpeg'
 orig_images = [] # Store the images here.
 input_images = [] # Store resized versions of the images here.
 orig_images.append(imread(img_path))
